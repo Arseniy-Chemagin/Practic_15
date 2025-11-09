@@ -90,3 +90,44 @@ namespace SmartHome
         }
     }
 }
+
+class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("--- Тестирование Лампы ---");
+            Lamp livingRoomLamp = new Lamp("Гостиная");
+            livingRoomLamp.TurnOn();
+            livingRoomLamp.SetLevel(50);
+            livingRoomLamp.SetLevel(120);
+            livingRoomLamp.TurnOff();
+
+            Console.WriteLine("\n--- Тестирование Вентилятора ---");
+            Fan bedroomFan = new Fan("Спальня");
+            bedroomFan.TurnOn();
+            bedroomFan.TurnOff();
+
+            Console.WriteLine("\n--- Полиморфизм ---");
+            
+            ISwitchable[] allDevices = new ISwitchable[]
+            {
+                new Lamp("Кухня"),
+                new Fan("Офис")
+            };
+
+            foreach (var device in allDevices)
+            {
+                Console.WriteLine($"\nУстройство типа: {device.GetType().Name}");
+                device.TurnOn();
+                
+                if (device is ILevelAdjustable adjustableDevice)
+                {
+                    adjustableDevice.SetLevel(75);
+                }
+                device.TurnOff();
+            }
+
+            Console.ReadKey();
+        }
+    }
+}
