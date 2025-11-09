@@ -1,0 +1,130 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace ElectronicsStore
+{
+    public interface IPriceable
+    {
+        decimal GetPrice();
+    }
+
+    public interface IGuaranteed
+    {
+        int GetWarrantyPeriodMonths();
+    }
+
+    public class Phone : IPriceable, IGuaranteed
+    {
+        public string Model { get; private set; }
+        public decimal Price { get; private set; }
+        public int WarrantyMonths { get; private set; }
+
+        public Phone(string model, decimal price, int warrantyMonths)
+        {
+            Model = model;
+            Price = price;
+            WarrantyMonths = warrantyMonths;
+        }
+
+        public decimal GetPrice()
+        {
+            return Price;
+        }
+
+        public int GetWarrantyPeriodMonths()
+        {
+            return WarrantyMonths;
+        }
+
+        public override string ToString()
+        {
+            return $"Телефон: {Model}, Цена: {Price:C}, Гарантия: {WarrantyMonths} мес.";
+        }
+    }
+
+    public class Laptop : IPriceable
+    {
+        public string Model { get; private set; }
+        public decimal Price { get; private set; }
+
+        public Laptop(string model, decimal price)
+        {
+            Model = model;
+            Price = price;
+        }
+
+        public decimal GetPrice()
+        {
+            return Price;
+        }
+
+        public override string ToString()
+        {
+            return $"Ноутбук: {Model}, Цена: {Price:C}";
+        }
+    }
+
+    public class ElectronicsStore
+    {
+        private List<object> _products;
+
+        public ElectronicsStore()
+        {
+            _products = new List<object>();
+        }
+
+        public void AddProduct(object product)
+        {
+            _products.Add(product);
+        }
+
+        public void ProcessProducts()
+        {
+            decimal totalCost = 0;
+            Console.WriteLine("\n--- Информация о товарах ---");
+
+            foreach (var product in _products)
+            {
+                if (product is IPriceable priceableProduct)
+                {
+                    decimal price = priceableProduct.GetPrice();
+                    totalCost += price;
+                    Console.WriteLine($"{product.ToString()} (Цена: {price:C})");
+
+                    if (product is IGuaranteed guaranteedProduct)
+                    {
+                        int warranty = guaranteedProduct.GetWarrantyPeriodMonths();
+                        Console.WriteLine($"  -> Гарантия: {warranty} месяцев.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("  -> Гарантия: Нет.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"{product.ToString()} (Цена не определена)");
+                }
+            }
+
+            Console.WriteLine($"\n--- Общая стоимость всех товаров: {totalCost:C} ---");
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ElectronicsStore myStore = new ElectronicsStore();
+
+            myStore.AddProduct(new Phone("iPhone 15", 999.99m, 12));
+            myStore.AddProduct(new Phone("Samsung Galaxy S24", 899.50m, 24));
+            myStore.AddProduct(new Laptop("Dell XPS 13", 1200.00m));
+            myStore.AddProduct(new Laptop("MacBook Air M3", 1100.00m));
+
+            myStore.ProcessProducts();
+
+            Console.ReadKey();
+        }
+    }
+}
