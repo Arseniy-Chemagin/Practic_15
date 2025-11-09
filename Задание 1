@@ -53,3 +53,33 @@ namespace RobotsOnFactory
         }
     }
 }
+
+class Program
+    {
+        static void Main(string[] args)
+        {
+            Robot myRobot = new Robot("Валл-И", 80);
+
+            Console.WriteLine("\n--- Начало цикла действий ---");
+
+            myRobot.Work();
+            myRobot.Work();
+            myRobot.Charge();
+            myRobot.Work();
+            
+            Console.WriteLine("\n--- Дополнительная проверка граничных условий ---");
+            
+            myRobot.Work();
+            myRobot.Work();
+            myRobot.Work();
+            myRobot.Work();
+            myRobot.Work();
+            
+            myRobot.Charge();
+            myRobot.Charge();
+            myRobot.Charge();
+
+            Console.ReadKey();
+        }
+    }
+}
