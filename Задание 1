@@ -1,0 +1,55 @@
+﻿using System;
+
+namespace RobotsOnFactory
+{
+    public interface IWorkable
+    {
+        void Work();
+    }
+
+    public interface IChargeable
+    {
+        void Charge();
+    }
+
+    public class Robot : IWorkable, IChargeable
+    {
+        private const int MAX_ENERGY = 100;
+        private const int MIN_ENERGY = 0;
+        private const int WORK_COST = 20;
+        private const int CHARGE_GAIN = 50;
+
+        public string Name { get; private set; }
+        public int Energy { get; private set; }
+
+        public Robot(string name, int initialEnergy = 100)
+        {
+            Name = name;
+            Energy = Math.Max(MIN_ENERGY, Math.Min(initialEnergy, MAX_ENERGY));
+            Console.WriteLine($"Робот {Name} создан с энергией: {Energy}");
+        }
+
+        private void DisplayStatus(string action)
+        {
+            Console.WriteLine($"[{action}] Робот {Name}. Текущая энергия: {Energy}");
+        }
+
+        public void Work()
+        {
+            if (Energy == MIN_ENERGY)
+            {
+                Console.WriteLine($"Робот {Name} не может работать, энергия {Energy}.");
+                DisplayStatus("Работа");
+                return;
+            }
+            Energy = Math.Max(MIN_ENERGY, Energy - WORK_COST);
+            DisplayStatus("Работа");
+        }
+
+        public void Charge()
+        {
+            Energy = Math.Min(MAX_ENERGY, Energy + CHARGE_GAIN);
+            DisplayStatus("Зарядка");
+        }
+    }
+}
