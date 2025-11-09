@@ -1,0 +1,92 @@
+using System;
+
+namespace SmartHome
+{
+    public interface ISwitchable
+    {
+        void TurnOn();
+        void TurnOff();
+        void DisplayState();
+    }
+
+    public interface ILevelAdjustable
+    {
+        void SetLevel(int level);
+    }
+
+    public class Lamp : ISwitchable, ILevelAdjustable
+    {
+        private const int MAX_LEVEL = 100;
+        private const int MIN_LEVEL = 0;
+
+        public string Name { get; private set; }
+        private int _currentLevel;
+        private bool _isOn;
+
+        public Lamp(string name)
+        {
+            Name = name;
+            _currentLevel = MIN_LEVEL;
+            _isOn = false;
+        }
+
+        public void TurnOn()
+        {
+            _isOn = true;
+            _currentLevel = MAX_LEVEL;
+            DisplayState();
+        }
+
+        public void TurnOff()
+        {
+            _isOn = false;
+            _currentLevel = MIN_LEVEL;
+            DisplayState();
+        }
+        
+        public void SetLevel(int level)
+        {
+            _currentLevel = Math.Max(MIN_LEVEL, Math.Min(level, MAX_LEVEL));
+            _isOn = (_currentLevel > MIN_LEVEL);
+            DisplayState();
+        }
+
+        public void DisplayState()
+        {
+            string status = _isOn ? "ВКЛЮЧЕНА" : "ВЫКЛЮЧЕНА";
+            Console.WriteLine($"[ЛАМПА {Name}] Состояние: {status}, Уровень: {_currentLevel}");
+        }
+    }
+
+    public class Fan : ISwitchable
+    {
+        public string Name { get; private set; }
+        private bool _isOn;
+
+        public Fan(string name)
+        {
+            Name = name;
+            _isOn = false;
+        }
+
+        public void TurnOn()
+        {
+            _isOn = true;
+            Console.WriteLine($"Вентилятор '{Name}': Включен.");
+            DisplayState();
+        }
+
+        public void TurnOff()
+        {
+            _isOn = false;
+            Console.WriteLine($"Вентилятор '{Name}': Выключен.");
+            DisplayState();
+        }
+
+        public void DisplayState()
+        {
+            string status = _isOn ? "РАБОТАЕТ" : "ОСТАНОВЛЕН";
+            Console.WriteLine($"[ВЕНТИЛЯТОР {Name}] Текущее состояние: {status}");
+        }
+    }
+}
