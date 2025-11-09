@@ -1,0 +1,95 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq; 
+
+namespace GameAbilities
+{
+   
+    public interface IAttacker
+    {
+        void Attack();
+    }
+
+    
+    public interface IHealer
+    {
+        void Heal();
+    }
+
+    public class Warrior : IAttacker
+    {
+        public string Name { get; set; }
+
+        public Warrior(string name)
+        {
+            Name = name;
+        }
+
+        public void Attack()
+        {
+            Console.WriteLine($"Воин {Name} наносит сокрушительный удар мечом!");
+        }
+    }
+
+    public class Mage : IAttacker, IHealer
+    {
+        public string Name { get; set; }
+
+        public Mage(string name)
+        {
+            Name = name;
+        }
+
+        public void Attack()
+        {
+            Console.WriteLine($"Маг {Name} атакует огненным шаром!");
+        }
+
+        public void Heal()
+        {
+            Console.WriteLine($"Маг {Name} восстанавливает здоровье цели светлой магией.");
+        }
+    }
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            List<object> characters = new List<object>
+            {
+                new Warrior("Конан"),
+                new Mage("Гэндальф"),
+                new Warrior("Ахиллес"),
+                new Mage("Мерлин")
+            };
+
+            Console.WriteLine("=====================================");
+            Console.WriteLine("1. Проходимся по всем, кто умеет атаковать:");
+            Console.WriteLine("=====================================");
+
+            foreach (var character in characters)
+            {
+                if (character is IAttacker attacker)
+                {
+                    attacker.Attack();
+                }
+            }
+
+            Console.WriteLine("\n=====================================");
+            Console.WriteLine("2. Проходимся по всем, кто умеет лечить:");
+            Console.WriteLine("=====================================");
+
+            foreach (var character in characters)
+            {
+                if (character is IHealer healer)
+                {
+                    healer.Heal();
+                }
+            }
+            
+            Console.ReadKey();
+        }
+    }
+}
